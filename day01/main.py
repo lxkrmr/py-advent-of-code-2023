@@ -1,4 +1,4 @@
-from utils import line_generator, check
+from utils import check, line_generator
 
 
 def main():
@@ -11,7 +11,7 @@ def main():
 
 def part_one(filename: str) -> int:
     return sum([
-        to_calibration_value(extract_digits_part_one(line))
+        to_calibration(extract_digits_part_one(line))
         for line
         in line_generator(filename)
     ])
@@ -19,7 +19,7 @@ def part_one(filename: str) -> int:
 
 def part_two(filename: str) -> int:
     return sum([
-        to_calibration_value(extract_digits_part_two(line))
+        to_calibration(extract_digits_part_two(line))
         for line
         in line_generator(filename)
     ])
@@ -29,42 +29,62 @@ def extract_digits_part_one(line: str) -> [int]:
     return [int(char) for char in line if char.isdigit()]
 
 
-def to_calibration_value(digits: [int]):
-    result = int(f'{digits[0]}{digits[-1]}')
-    print(result, digits)
-    return result
-
-
-PREFIXES_TO_DIGITS = [
-    ("1", 1), ("one", 1),
-    ("2", 2), ("two", 2),
-    ("3", 3), ("three", 3),
-    ("4", 4), ("four", 4),
-    ("5", 5), ("five", 5),
-    ("6", 6), ("six", 6),
-    ("7", 7), ("seven", 7),
-    ("8", 8), ("eight", 8),
-    ("9", 9), ("nine", 9),
-]
-
-
 def extract_digits_part_two(line: str) -> [int]:
     result = []
 
     rest = line
-    found_prefix = False
     while rest:
-        for prefix, digit in PREFIXES_TO_DIGITS:
-            if rest.startswith(prefix):
-                found_prefix = True
-                result.append(digit)
-                rest = rest.removeprefix(prefix)
-
-        if not found_prefix:
+        if starts_with_digit(rest):
+            digit, rest = extract_digit(rest)
+            result.append(digit)
+        elif starts_with_digit_as_word(rest):
+            digit, rest = extract_digit_as_word(rest)
+            result.append(digit)
+        else:
             rest = rest[1:]
-        found_prefix = False
 
     return result
+
+
+def starts_with_digit(rest: str) -> bool:
+    return rest[0].isdigit()
+
+
+def extract_digit(rest):
+    return int(rest[0]), rest[1:]
+
+
+WORDS_TO_DIGIT = {
+    'one': 1,
+    'two': 2,
+    'three': 3,
+    'four': 4,
+    'five': 5,
+    'six': 6,
+    'seven': 7,
+    'eight': 8,
+    'nine': 9,
+}
+
+
+def starts_with_digit_as_word(rest: str) -> bool:
+    for word in WORDS_TO_DIGIT:
+        if rest.startswith(word):
+            return True
+
+    return False
+
+
+def extract_digit_as_word(rest: str) -> (int, str):
+    for word in WORDS_TO_DIGIT:
+        if rest.startswith(word):
+            return WORDS_TO_DIGIT[word], rest[len(word):]
+
+    return None, rest
+
+
+def to_calibration(digits: [int]) -> int:
+    return int(f'{digits[0]}{digits[-1]}')
 
 
 if __name__ == '__main__':

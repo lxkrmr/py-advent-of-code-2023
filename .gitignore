@@ -1,0 +1,5 @@
+# Don't include the puzzle input
+puzzle_input.txt
+
+# PyCharm
+.idea

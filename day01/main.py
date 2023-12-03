@@ -1,3 +1,5 @@
+from typing import Union
+
 from utils import check, line_generator
 
 
@@ -35,13 +37,11 @@ def extract_digits_part_two(line: str) -> [int]:
     rest = line
     while rest:
         if starts_with_digit(rest):
-            digit, rest = extract_digit(rest)
-            result.append(digit)
+            result.append(extract_digit(rest))
         elif starts_with_digit_as_word(rest):
-            digit, rest = extract_digit_as_word(rest)
-            result.append(digit)
-        else:
-            rest = rest[1:]
+            result.append(extract_digit_as_word(rest))
+
+        rest = rest[1:]
 
     return result
 
@@ -50,8 +50,8 @@ def starts_with_digit(rest: str) -> bool:
     return rest[0].isdigit()
 
 
-def extract_digit(rest):
-    return int(rest[0]), rest[1:]
+def extract_digit(rest) -> int:
+    return int(rest[0])
 
 
 WORDS_TO_DIGIT = {
@@ -75,12 +75,12 @@ def starts_with_digit_as_word(rest: str) -> bool:
     return False
 
 
-def extract_digit_as_word(rest: str) -> (int, str):
+def extract_digit_as_word(rest: str) -> Union[int, None]:
     for word in WORDS_TO_DIGIT:
         if rest.startswith(word):
-            return WORDS_TO_DIGIT[word], rest[len(word):]
+            return WORDS_TO_DIGIT[word]
 
-    return None, rest
+    return None
 
 
 def to_calibration(digits: [int]) -> int:

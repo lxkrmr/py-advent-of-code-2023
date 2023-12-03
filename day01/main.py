@@ -3,6 +3,7 @@ from utils import line_generator, check
 
 def main():
     check(solve_puzzle_one('test_input.txt'), 142)
+    print(solve_puzzle_one('puzzle_input.txt'))
 
 
 def solve_puzzle_one(filename: str) -> int:

@@ -2,13 +2,20 @@ from utils import line_generator, check
 
 
 def main():
-    check(solve_puzzle_one('test_input.txt'), 142)
-    print(solve_puzzle_one('puzzle_input.txt'))
+    check(part_one('test_input_part_one.txt'), 142)
+    print(part_one('puzzle_input.txt'))
+
+    check(part_two('test_input_part_two.txt'), 281)
+    print(part_one('puzzle_input.txt'))
 
 
-def solve_puzzle_one(filename: str) -> int:
+def part_one(filename: str) -> int:
     result = [to_calibration_value(line) for line in line_generator(filename)]
     return sum(result)
+
+
+def part_two(filename: str) -> int:
+    return 0
 
 
 def to_calibration_value(line: str):
